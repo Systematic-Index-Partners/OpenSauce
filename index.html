@@ -30,7 +30,6 @@
       align-items: center;
     }
 
-    /* ── Centered column ─────────────────────────────────── */
     .site-wrapper {
       width: 65%;
       max-width: 1100px;
@@ -39,7 +38,6 @@
       flex: 1;
     }
 
-    /* ── Header ─────────────────────────────────────────── */
     header {
       border-bottom: 1px solid var(--border);
       background: var(--surface);
@@ -106,7 +104,6 @@
 
     #add-recipe-btn:hover { opacity: 0.85; }
 
-    /* ── Main ────────────────────────────────────────────── */
     main {
       flex: 1;
       padding: 2rem 1.25rem;
@@ -118,7 +115,6 @@
       gap: 1.5rem;
     }
 
-    /* ── Cards ───────────────────────────────────────────── */
     .recipe-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -201,7 +197,6 @@
       overflow: hidden;
     }
 
-    /* ── States ──────────────────────────────────────────── */
     #loading, #empty-state, #error-state {
       text-align: center;
       padding: 4rem 1rem;
@@ -219,7 +214,6 @@
     #empty-state p, #error-state p { font-size: 0.875rem; }
     #empty-state a, #error-state a { color: var(--accent); }
 
-    /* ── Success banner ──────────────────────────────────── */
     #success-banner {
       background: #e8f5e9;
       border: 1px solid #a5d6a7;
@@ -242,7 +236,6 @@
       font-size: 1rem;
     }
 
-    /* ── Footer ──────────────────────────────────────────── */
     footer {
       border-top: 1px solid var(--border);
       padding: 1.25rem;
@@ -254,7 +247,6 @@
 
     footer a { color: var(--muted); }
 
-    /* ── Modal overlay ───────────────────────────────────── */
     #modal-overlay {
       position: fixed;
       inset: 0;
@@ -304,7 +296,6 @@
       padding: 0.25rem;
     }
 
-    /* ── Step progress bar ───────────────────────────────── */
     .step-bar {
       height: 3px;
       background: var(--border);
@@ -317,14 +308,12 @@
       transition: width 0.25s ease;
     }
 
-    /* ── Modal body (scrollable) ─────────────────────────── */
     .modal-body {
       padding: 1.25rem 1.5rem;
       overflow-y: auto;
       flex: 1;
     }
 
-    /* ── Form elements ───────────────────────────────────── */
     .field-group {
       display: flex;
       flex-direction: column;
@@ -439,7 +428,6 @@
       display: none;
     }
 
-    /* ── Modal footer ────────────────────────────────────── */
     .modal-footer {
       padding: 1rem 1.5rem;
       border-top: 1px solid var(--border);
@@ -479,7 +467,6 @@
       max-width: 300px;
     }
 
-    /* ── Responsive ──────────────────────────────────────── */
     @media (max-width: 900px) {
       .site-wrapper { width: 90%; }
     }
@@ -533,7 +520,6 @@
 
 </div>
 
-<!-- ── Recipe submission modal ───────────────────────────── -->
 <div id="modal-overlay" hidden>
   <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
 
@@ -559,16 +545,13 @@
 </div>
 
 <script>
-  // ── Config ─────────────────────────────────────────────
-  const GITHUB_CLIENT_ID = 'Ov23liUJyHcLR9D1mg79'; // replace after creating OAuth App
+  const GITHUB_CLIENT_ID = 'Ov23liUJyHcLR9D1mg79';
   const REPO_OWNER = 'boykowealth';
   const REPO_NAME  = 'OpenSauce';
   const TOTAL_STEPS = 10;
 
-  // ── Placeholder image ───────────────────────────────────
   const PLACEHOLDER = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="4" height="3"%3E%3Crect width="4" height="3" fill="%23d4d8dd"/%3E%3C/svg%3E';
 
-  // ── Auth ────────────────────────────────────────────────
   function getToken() { return sessionStorage.getItem('gh_token'); }
   function setToken(t) { sessionStorage.setItem('gh_token', t); }
 
@@ -596,7 +579,6 @@
     location.href = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&scope=public_repo&redirect_uri=${redirect}`;
   }
 
-  // ── Catalog ─────────────────────────────────────────────
   let allRecipes = [];
 
   function formatDate(iso) {
@@ -742,7 +724,6 @@
     }
   }
 
-  // ── Form wizard ─────────────────────────────────────────
   let currentStep = 1;
   let formData = {};
   let photoBase64 = null;
@@ -1250,7 +1231,6 @@
     return recipe;
   }
 
-  // ── GitHub API helpers ──────────────────────────────────
   async function ghApi(path, method = 'GET', body = null) {
     const token = getToken();
     const opts = {
@@ -1286,24 +1266,20 @@
       const slug = recipe.meta.id;
       const branch = `recipe/${slug}`;
 
-      // 1. Get main SHA
       const refData = await ghApi(`/repos/${REPO_OWNER}/${REPO_NAME}/git/ref/heads/main`);
       const mainSha = refData.object.sha;
 
-      // 2. Create branch
       await ghApi(`/repos/${REPO_OWNER}/${REPO_NAME}/git/refs`, 'POST', {
         ref: `refs/heads/${branch}`,
         sha: mainSha,
       });
 
-      // 3. Commit recipe.json
       await ghApi(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/recipes/${slug}/recipe.json`, 'PUT', {
         message: `Add recipe: ${recipe.meta.title}`,
         content: toBase64(JSON.stringify(recipe, null, 2)),
         branch,
       });
 
-      // 4. Commit photo
       if (photoBase64) {
         await ghApi(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/recipes/${slug}/photo.jpg`, 'PUT', {
           message: `Add photo for ${slug}`,
@@ -1312,12 +1288,10 @@
         });
       }
 
-      // 5. Get manifest + sha
       const manifestData = await ghApi(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/recipes/manifest.json?ref=${branch}`);
       const currentManifest = JSON.parse(atob(manifestData.content.replace(/\n/g, '')));
       const updatedManifest = [...currentManifest, slug];
 
-      // 6. Update manifest
       await ghApi(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/recipes/manifest.json`, 'PUT', {
         message: `Update manifest for ${slug}`,
         content: toBase64(JSON.stringify(updatedManifest, null, 2) + '\n'),
@@ -1325,7 +1299,6 @@
         branch,
       });
 
-      // 7. Open PR
       const pr = await ghApi(`/repos/${REPO_OWNER}/${REPO_NAME}/pulls`, 'POST', {
         title: recipe.meta.title,
         body: `**Author:** @${recipe.meta.author}\n\n**Style:** ${recipe.meta.style}\n\n**Notes:** ${recipe.meta.notes}\n\n---\n*Submitted via OpenSauce catalog*`,
@@ -1346,7 +1319,6 @@
     }
   }
 
-  // ── Modal lifecycle ─────────────────────────────────────
   function openModal() {
     currentStep = 1;
     formData = {};
@@ -1392,7 +1364,6 @@
 
   document.getElementById('sort-select').addEventListener('change', sortAndRender);
 
-  // ── Boot ────────────────────────────────────────────────
   handleOAuthCallback().then(() => initCatalog());
 </script>
 
