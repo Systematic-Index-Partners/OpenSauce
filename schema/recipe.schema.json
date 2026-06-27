@@ -1,0 +1,215 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/boykowealth/OpenSauce/main/schema/recipe.schema.json",
+  "title": "OpenSauce Recipe",
+  "type": "object",
+  "required": ["meta", "dough", "sauce", "cheese", "bake"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["id", "date", "author", "title", "style", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "id":     { "type": "string" },
+        "date":   { "type": "string", "format": "date" },
+        "author": { "type": "string" },
+        "title":  { "type": "string" },
+        "style":  { "type": "string" },
+        "notes":  { "type": "string" }
+      }
+    },
+
+    "dough": {
+      "type": "object",
+      "required": ["flour", "water", "salt", "yeast", "oil", "sugar", "process"],
+      "additionalProperties": false,
+      "properties": {
+        "flour": {
+          "type": "object",
+          "required": ["type", "protein_percent", "bromated", "grams"],
+          "additionalProperties": false,
+          "properties": {
+            "type":            { "type": "string" },
+            "protein_percent": { "type": "number", "minimum": 0, "maximum": 100 },
+            "bromated":        { "type": "boolean" },
+            "grams":           { "type": "number", "minimum": 0 }
+          }
+        },
+        "water": {
+          "type": "object",
+          "required": ["grams", "hydration_percent", "temperature_c"],
+          "additionalProperties": false,
+          "properties": {
+            "grams":             { "type": "number", "minimum": 0 },
+            "hydration_percent": { "type": "number", "minimum": 1, "maximum": 100 },
+            "temperature_c":     { "type": "number" }
+          }
+        },
+        "salt": {
+          "type": "object",
+          "required": ["grams", "percent_of_flour"],
+          "additionalProperties": false,
+          "properties": {
+            "grams":           { "type": "number", "minimum": 0 },
+            "percent_of_flour":{ "type": "number", "minimum": 0 }
+          }
+        },
+        "yeast": {
+          "type": "object",
+          "required": ["type", "grams", "percent_of_flour"],
+          "additionalProperties": false,
+          "properties": {
+            "type":            { "type": "string", "enum": ["instant dry", "active dry", "fresh", "sourdough starter"] },
+            "grams":           { "type": "number", "minimum": 0 },
+            "percent_of_flour":{ "type": "number", "minimum": 0 }
+          }
+        },
+        "oil": {
+          "type": "object",
+          "required": ["type", "grams"],
+          "additionalProperties": false,
+          "properties": {
+            "type":  { "type": "string" },
+            "grams": { "type": "number", "minimum": 0 }
+          }
+        },
+        "sugar": {
+          "type": "object",
+          "required": ["grams"],
+          "additionalProperties": false,
+          "properties": {
+            "grams": { "type": "number", "minimum": 0 }
+          }
+        },
+        "preferment": {
+          "type": "object",
+          "required": ["type", "flour_grams", "water_grams", "yeast_grams", "ferment_hours", "ferment_temp_c"],
+          "additionalProperties": false,
+          "properties": {
+            "type":          { "type": "string" },
+            "flour_grams":   { "type": "number", "minimum": 0 },
+            "water_grams":   { "type": "number", "minimum": 0 },
+            "yeast_grams":   { "type": "number", "minimum": 0 },
+            "ferment_hours": { "type": "number", "minimum": 0 },
+            "ferment_temp_c":{ "type": "number" }
+          }
+        },
+        "process": {
+          "type": "object",
+          "required": ["mix_method", "autolyse_minutes", "bulk_ferment_hours", "bulk_ferment_temp_c", "cold_proof_hours", "cold_proof_temp_c", "ball_weight_grams", "stretch_and_fold_sets"],
+          "additionalProperties": false,
+          "properties": {
+            "mix_method":             { "type": "string", "enum": ["hand", "stand mixer", "no-knead"] },
+            "autolyse_minutes":       { "type": "number", "minimum": 0 },
+            "bulk_ferment_hours":     { "type": "number", "minimum": 0 },
+            "bulk_ferment_temp_c":    { "type": "number" },
+            "cold_proof_hours":       { "type": "number", "minimum": 0 },
+            "cold_proof_temp_c":      { "type": "number" },
+            "ball_weight_grams":      { "type": "number", "minimum": 0 },
+            "stretch_and_fold_sets":  { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+
+    "sauce": {
+      "type": "object",
+      "required": ["tomatoes", "salt", "garlic", "olive_oil_ml", "oregano_dry_grams", "red_pepper_flakes_grams", "cooked", "process_method", "moisture_content", "grams_per_pizza"],
+      "additionalProperties": false,
+      "properties": {
+        "tomatoes": {
+          "type": "object",
+          "required": ["brand", "type", "grams", "drained"],
+          "additionalProperties": false,
+          "properties": {
+            "brand":   { "type": "string" },
+            "type":    { "type": "string" },
+            "grams":   { "type": "number", "minimum": 0 },
+            "drained": { "type": "boolean" }
+          }
+        },
+        "salt": {
+          "type": "object",
+          "required": ["grams", "type"],
+          "additionalProperties": false,
+          "properties": {
+            "grams": { "type": "number", "minimum": 0 },
+            "type":  { "type": "string" }
+          }
+        },
+        "garlic": {
+          "type": "object",
+          "required": ["cloves", "method"],
+          "additionalProperties": false,
+          "properties": {
+            "cloves": { "type": "number", "minimum": 0 },
+            "method": { "type": "string" }
+          }
+        },
+        "olive_oil_ml":             { "type": "number", "minimum": 0 },
+        "oregano_dry_grams":        { "type": "number", "minimum": 0 },
+        "red_pepper_flakes_grams":  { "type": "number", "minimum": 0 },
+        "cooked":                   { "type": "boolean" },
+        "process_method":           { "type": "string", "enum": ["hand-crushed", "blended", "passed", "food-milled"] },
+        "moisture_content":         { "type": "string" },
+        "grams_per_pizza":          { "type": "number", "minimum": 0 }
+      }
+    },
+
+    "cheese": {
+      "type": "object",
+      "required": ["mozzarella", "application_order", "cheese_to_edge_cm"],
+      "additionalProperties": false,
+      "properties": {
+        "mozzarella": {
+          "type": "object",
+          "required": ["type", "brand", "moisture_percent", "grated", "grams_per_pizza"],
+          "additionalProperties": false,
+          "properties": {
+            "type":            { "type": "string" },
+            "brand":           { "type": "string" },
+            "moisture_percent":{ "type": "number", "minimum": 0, "maximum": 100 },
+            "grated":          { "type": "boolean" },
+            "grams_per_pizza": { "type": "number", "minimum": 0 }
+          }
+        },
+        "pecorino_romano": {
+          "type": "object",
+          "required": ["grams_per_pizza", "application"],
+          "additionalProperties": false,
+          "properties": {
+            "grams_per_pizza": { "type": "number", "minimum": 0 },
+            "application":     { "type": "string" }
+          }
+        },
+        "application_order":  { "type": "string", "enum": ["cheese under sauce", "sauce under cheese"] },
+        "cheese_to_edge_cm":  { "type": "number", "minimum": 0 }
+      }
+    },
+
+    "bake": {
+      "type": "object",
+      "required": ["oven", "surface", "preheat_minutes", "temp_c", "position", "time_minutes", "broil_finish", "launch_method"],
+      "additionalProperties": false,
+      "if": {
+        "properties": { "broil_finish": { "const": true } },
+        "required": ["broil_finish"]
+      },
+      "then": {
+        "required": ["broil_seconds"]
+      },
+      "properties": {
+        "oven":             { "type": "string", "enum": ["home electric", "home gas", "home convection", "outdoor gas", "wood-fired"] },
+        "surface":          { "type": "string", "enum": ["baking steel", "baking stone", "sheet pan", "cast iron", "screen"] },
+        "preheat_minutes":  { "type": "number", "minimum": 0 },
+        "temp_c":           { "type": "number" },
+        "position":         { "type": "string", "enum": ["top rack", "middle rack", "bottom rack"] },
+        "time_minutes":     { "type": "number", "minimum": 0 },
+        "broil_finish":     { "type": "boolean" },
+        "broil_seconds":    { "type": "number", "minimum": 0 },
+        "launch_method":    { "type": "string" }
+      }
+    }
+  }
+}
