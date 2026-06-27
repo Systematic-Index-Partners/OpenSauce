@@ -1,4 +1,4 @@
-<img width="1280" height="320" alt="opensauce_banner" src="assets/opensauce_banner.png" />
+<img width="1200" height="240" alt="opensauce_banner" src="assets/opensauce_banner.svg" />
 
 **A precision recipe repository for New York-style pizza.** Every attempt logged. Every variable tracked. Every iteration building toward the perfect pie.
 
@@ -10,13 +10,13 @@ Browse the full catalog and submit your own recipes at **[open-sauce-pn5a.vercel
 
 The site shows every submitted recipe as a card with the pizza photo, date, key stats (hydration, flour type, bake temp, surface), and the baker's notes. Use the sort control in the top right to order by newest or oldest attempt.
 
-Each card is a snapshot of one bake — not a polished recipe, but a logged attempt with enough data to reproduce it exactly or identify what to change next.
+Each card is a snapshot of one bake - not a polished recipe, but a logged attempt with enough data to reproduce it exactly or identify what to change next.
 
 ---
 
 ## Submitting a Recipe
 
-Everything happens through the site — no GitHub account setup or manual JSON editing required.
+Everything happens through the site - no GitHub account setup or manual JSON editing required.
 
 **1. Click the + button** in the top right of the catalog.
 
@@ -29,7 +29,7 @@ Everything happens through the site — no GitHub account setup or manual JSON e
 | 1 - Recipe Info | Title, date, your GitHub username, style, notes on what you were going for |
 | 2 - Flour & Water | Flour type, protein %, whether bromated, grams of each, hydration %, water temp |
 | 3 - Yeast, Salt, Oil & Sugar | Yeast type and quantity, salt, oil type and quantity, sugar |
-| 4 - Preferment | Toggle on if you used a poolish, biga, etc. — type, ratios, fermentation time and temp |
+| 4 - Preferment | Toggle on if you used a poolish, biga, etc. - type, ratios, fermentation time and temp |
 | 5 - Process | Mix method, autolyse, bulk ferment time and temp, cold proof time and temp, ball weight, stretch and fold sets |
 | 6 - Sauce | Tomato brand and type, whether drained, garlic, olive oil, oregano, red pepper, process method, moisture assessment, grams per pizza |
 | 7 - Cheese | Mozzarella brand, moisture %, grated or sliced, grams per pizza, optional pecorino, application order relative to sauce |
@@ -39,7 +39,7 @@ Everything happens through the site — no GitHub account setup or manual JSON e
 
 **4. Submit.** The site creates a branch in this repository, commits your `recipe.json` and photo, and opens a pull request automatically. You'll get a link to the PR when it's done.
 
-**5. Review.** All PRs are reviewed before merging. We check that the JSON is valid, the photo is present, and the data is complete enough to reproduce. Bad pizzas are welcome — that's how we learn. But the data needs to be thorough.
+**5. Review.** All PRs are reviewed before merging. We check that the JSON is valid, the photo is present, and the data is complete enough to reproduce. Bad pizzas are welcome - that's how we learn. But the data needs to be thorough.
 
 ---
 
@@ -60,7 +60,7 @@ Reproducibility is the entire point. These are the variables that actually move 
 ## Contributing Guidelines
 
 - One attempt per pull request
-- Photos must be of the actual pizza from that attempt — no stock images
+- Photos must be of the actual pizza from that attempt - no stock images
 - If you're iterating on someone else's recipe, reference their `id` in your notes
 - Don't round your measurements. Precision is the point.
 
@@ -68,4 +68,4 @@ Reproducibility is the entire point. These are the variables that actually move 
 
 ## License
 
-Recipes and data are released under [CC0](https://creativecommons.org/publicdomain/zero/1.0/) — no rights reserved. Do whatever you want with them.
+Recipes and data are released under [CC0](https://creativecommons.org/publicdomain/zero/1.0/) - no rights reserved. Do whatever you want with them.
