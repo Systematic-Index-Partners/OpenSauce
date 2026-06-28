@@ -522,6 +522,145 @@
       max-width: 300px;
     }
 
+    #detail-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 1.5rem;
+    }
+
+    #detail-panel {
+      background: var(--bg);
+      border-radius: 10px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    #detail-close {
+      position: sticky;
+      top: 0.75rem;
+      float: right;
+      margin: 0.75rem 0.75rem 0 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 2rem;
+      height: 2rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      line-height: 1;
+    }
+
+    #detail-photo-wrap {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      border-radius: 10px 10px 0 0;
+      background: var(--border);
+      margin-top: -2.75rem;
+    }
+
+    #detail-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    #detail-content {
+      padding: 1.5rem 2rem 2rem;
+    }
+
+    .detail-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .detail-title {
+      font-size: 1.375rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .detail-date {
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+
+    .detail-style {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
+      background: var(--border);
+      padding: 0.1rem 0.5rem;
+      border-radius: 3px;
+    }
+
+    .detail-author {
+      font-size: 0.8125rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .detail-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .detail-section-title {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem 1.5rem;
+    }
+
+    .detail-grid.three {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .detail-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .detail-label {
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
+    .detail-value {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
     @media (max-width: 900px) {
       .site-wrapper { width: 90%; }
     }
@@ -617,9 +756,19 @@
   </div>
 </div>
 
+<div id="detail-overlay" hidden>
+  <div id="detail-panel" role="dialog" aria-modal="true">
+    <button id="detail-close" aria-label="Close">&times;</button>
+    <div id="detail-photo-wrap">
+      <img id="detail-photo" alt="">
+    </div>
+    <div id="detail-content"></div>
+  </div>
+</div>
+
 <script>
   const GITHUB_CLIENT_ID = 'Ov23liEVt5dFOKSk6wGC';
-  const REPO_OWNER = 'boykowealth';
+  const REPO_OWNER = 'Systematic-Index-Partners';
   const REPO_NAME  = 'OpenSauce';
   const TOTAL_STEPS = 10;
 
@@ -659,6 +808,159 @@
     return new Date(Number(y), Number(m) - 1, Number(d))
       .toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   }
+
+  function detailRow(label, value) {
+    if (value == null || value === '' || value === false) return null;
+    const wrap = document.createElement('div');
+    wrap.className = 'detail-row';
+    wrap.innerHTML = `<span class="detail-label">${label}</span><span class="detail-value">${value}</span>`;
+    return wrap;
+  }
+
+  function detailSection(title, rows, cols) {
+    const section = document.createElement('div');
+    section.className = 'detail-section';
+    const heading = document.createElement('div');
+    heading.className = 'detail-section-title';
+    heading.textContent = title;
+    section.appendChild(heading);
+    const grid = document.createElement('div');
+    grid.className = cols === 3 ? 'detail-grid three' : 'detail-grid';
+    rows.forEach(r => { if (r) grid.appendChild(r); });
+    section.appendChild(grid);
+    return section;
+  }
+
+  function openDetail(recipe, slug) {
+    const meta    = recipe.meta    || {};
+    const dough   = recipe.dough   || {};
+    const flour   = dough.flour    || {};
+    const water   = dough.water    || {};
+    const salt    = dough.salt     || {};
+    const yeast   = dough.yeast    || {};
+    const oil     = dough.oil      || {};
+    const sugar   = dough.sugar    || {};
+    const process = dough.process  || {};
+    const sauce   = recipe.sauce   || {};
+    const tomatoes = sauce.tomatoes || {};
+    const cheese  = recipe.cheese  || {};
+    const mozz    = cheese.mozzarella || {};
+    const bake    = recipe.bake    || {};
+    const pref    = dough.preferment || {};
+
+    const photo = document.getElementById('detail-photo');
+    photo.src = `recipes/${slug}/photo.jpg`;
+    photo.alt = meta.title || slug;
+    photo.onerror = () => { document.getElementById('detail-photo-wrap').style.display = 'none'; };
+
+    const content = document.getElementById('detail-content');
+    content.innerHTML = '';
+
+    const metaRow = document.createElement('div');
+    metaRow.className = 'detail-meta';
+    metaRow.innerHTML = `<span class="detail-title">${meta.title || slug}</span>${meta.style ? `<span class="detail-style">${meta.style}</span>` : ''}`;
+    content.appendChild(metaRow);
+
+    const author = document.createElement('div');
+    author.className = 'detail-author';
+    author.textContent = `${meta.date ? formatDate(meta.date) : ''}${meta.author ? ' · ' + meta.author : ''}`;
+    content.appendChild(author);
+
+    content.appendChild(detailSection('Flour', [
+      detailRow('Type', flour.type),
+      detailRow('Weight', flour.grams != null ? `${flour.grams}g` : null),
+      detailRow('Protein', flour.protein_percent != null ? `${flour.protein_percent}%` : null),
+      detailRow('Bromated', flour.bromated != null ? (flour.bromated ? 'Yes' : 'No') : null),
+    ]));
+
+    content.appendChild(detailSection('Water', [
+      detailRow('Weight', water.grams != null ? `${water.grams}g` : null),
+      detailRow('Hydration', water.hydration_percent != null ? `${water.hydration_percent}%` : null),
+      detailRow('Temperature', water.temperature_c != null ? `${water.temperature_c}°C` : null),
+    ]));
+
+    content.appendChild(detailSection('Additions', [
+      detailRow('Salt', salt.grams != null ? `${salt.grams}g (${salt.percent_of_flour}% flour)` : null),
+      detailRow('Yeast', yeast.grams != null ? `${yeast.grams}g ${yeast.type || ''} (${yeast.percent_of_flour}% flour)` : null),
+      detailRow('Oil', oil.grams != null ? `${oil.grams}g ${oil.type || ''}` : null),
+      detailRow('Sugar', sugar.grams != null ? `${sugar.grams}g` : null),
+    ]));
+
+    content.appendChild(detailSection('Process', [
+      detailRow('Mix method', process.mix_method),
+      detailRow('Autolyse', process.autolyse_minutes != null ? `${process.autolyse_minutes} min` : null),
+      detailRow('Bulk ferment', process.bulk_ferment_hours != null ? `${process.bulk_ferment_hours}h @ ${process.bulk_ferment_temp_c}°C` : null),
+      detailRow('Cold proof', process.cold_proof_hours != null ? `${process.cold_proof_hours}h @ ${process.cold_proof_temp_c}°C` : null),
+      detailRow('Ball weight', process.ball_weight_grams != null ? `${process.ball_weight_grams}g` : null),
+      detailRow('Stretch & fold', process.stretch_and_fold_sets != null ? `${process.stretch_and_fold_sets} sets` : null),
+    ]));
+
+    if (pref && Object.keys(pref).length > 0) {
+      content.appendChild(detailSection('Preferment', [
+        detailRow('Type', pref.type),
+        detailRow('Flour', pref.flour_grams != null ? `${pref.flour_grams}g` : null),
+        detailRow('Water', pref.water_grams != null ? `${pref.water_grams}g` : null),
+        detailRow('Ferment time', pref.ferment_hours != null ? `${pref.ferment_hours}h` : null),
+      ]));
+    }
+
+    content.appendChild(detailSection('Sauce', [
+      detailRow('Tomatoes', tomatoes.brand ? `${tomatoes.brand} ${tomatoes.type || ''} ${tomatoes.grams != null ? `(${tomatoes.grams}g)` : ''}` : null),
+      detailRow('Drained', tomatoes.drained != null ? (tomatoes.drained ? 'Yes' : 'No') : null),
+      detailRow('Salt', sauce.salt ? `${sauce.salt.grams}g ${sauce.salt.type || ''}` : null),
+      detailRow('Garlic', sauce.garlic ? `${sauce.garlic.cloves} clove(s), ${sauce.garlic.method}` : null),
+      detailRow('Olive oil', sauce.olive_oil_ml != null ? `${sauce.olive_oil_ml}ml` : null),
+      detailRow('Oregano', sauce.oregano_dry_grams != null ? `${sauce.oregano_dry_grams}g` : null),
+      detailRow('Chilli flakes', sauce.red_pepper_flakes_grams != null ? `${sauce.red_pepper_flakes_grams}g` : null),
+      detailRow('Cooked', sauce.cooked != null ? (sauce.cooked ? 'Yes' : 'No') : null),
+      detailRow('Method', sauce.process_method),
+      detailRow('Per pizza', sauce.grams_per_pizza != null ? `${sauce.grams_per_pizza}g` : null),
+    ]));
+
+    content.appendChild(detailSection('Cheese', [
+      detailRow('Type', mozz.type),
+      detailRow('Brand', mozz.brand),
+      detailRow('Moisture', mozz.moisture_percent != null ? `${mozz.moisture_percent}%` : null),
+      detailRow('Grated', mozz.grated != null ? (mozz.grated ? 'Yes' : 'No') : null),
+      detailRow('Per pizza', mozz.grams_per_pizza != null ? `${mozz.grams_per_pizza}g` : null),
+      detailRow('Application', cheese.application_order),
+      detailRow('Edge gap', cheese.cheese_to_edge_cm != null ? `${cheese.cheese_to_edge_cm}cm` : null),
+    ]));
+
+    content.appendChild(detailSection('Bake', [
+      detailRow('Oven', bake.oven),
+      detailRow('Surface', bake.surface),
+      detailRow('Preheat', bake.preheat_minutes != null ? `${bake.preheat_minutes} min` : null),
+      detailRow('Temperature', bake.temp_c != null ? `${bake.temp_c}°C` : null),
+      detailRow('Position', bake.position),
+      detailRow('Time', bake.time_minutes != null ? `${bake.time_minutes} min` : null),
+      detailRow('Broil finish', bake.broil_finish != null ? (bake.broil_finish ? 'Yes' : 'No') : null),
+      detailRow('Launch method', bake.launch_method),
+    ]));
+
+    if (meta.notes) {
+      content.appendChild(detailSection('Notes', [
+        (() => { const d = document.createElement('div'); d.className = 'detail-row'; d.style.gridColumn = '1/-1'; d.innerHTML = `<span class="detail-value" style="font-weight:400">${meta.notes}</span>`; return d; })()
+      ]));
+    }
+
+    document.getElementById('detail-photo-wrap').style.display = '';
+    document.getElementById('detail-overlay').hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDetail() {
+    document.getElementById('detail-overlay').hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('detail-close').addEventListener('click', closeDetail);
+  document.getElementById('detail-overlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('detail-overlay')) closeDetail();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !document.getElementById('detail-overlay').hidden) closeDetail();
+  });
 
   function buildCard(recipe, slug) {
     const dough = recipe.dough || {};
@@ -730,6 +1032,8 @@
 
     article.appendChild(photoDiv);
     article.appendChild(body);
+    article.style.cursor = 'pointer';
+    article.addEventListener('click', () => openDetail(recipe, slug));
     return article;
   }
 
