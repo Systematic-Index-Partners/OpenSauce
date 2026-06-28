@@ -1,0 +1,92 @@
+{
+  "meta": {
+    "id": "2026-06-27_iteration-001",
+    "date": "2026-06-27",
+    "author": "boykowealth",
+    "title": "Iteration 001",
+    "style": "New York"
+  },
+  "dough": {
+    "flour": {
+      "type": "Robinhood Unbleached All Purpose",
+      "protein_percent": 12,
+      "bromated": false,
+      "grams": 568
+    },
+    "water": {
+      "grams": 352,
+      "hydration_percent": 62,
+      "temperature_c": 15.56
+    },
+    "salt": {
+      "grams": 14,
+      "percent_of_flour": 2.5
+    },
+    "yeast": {
+      "type": "active dry",
+      "grams": 2.3,
+      "percent_of_flour": 0.4
+    },
+    "oil": {
+      "type": "olive",
+      "grams": 19
+    },
+    "sugar": {
+      "grams": 11
+    },
+    "process": {
+      "mix_method": "hand",
+      "autolyse_minutes": 10,
+      "bulk_ferment_hours": 1,
+      "bulk_ferment_temp_c": 23,
+      "cold_proof_hours": 18,
+      "cold_proof_temp_c": 1.4,
+      "ball_weight_grams": 480,
+      "stretch_and_fold_sets": 35
+    }
+  },
+  "sauce": {
+    "tomatoes": {
+      "brand": "Compliments",
+      "type": "whole peeled",
+      "grams": 382.5,
+      "drained": true
+    },
+    "salt": {
+      "grams": 18,
+      "type": "sea salt"
+    },
+    "garlic": {
+      "cloves": 1,
+      "method": "roasted"
+    },
+    "olive_oil_ml": 29.75,
+    "oregano_dry_grams": 1.5,
+    "red_pepper_flakes_grams": 0,
+    "cooked": true,
+    "process_method": "hand-crushed",
+    "moisture_content": "medium",
+    "grams_per_pizza": 60
+  },
+  "cheese": {
+    "mozzarella": {
+      "type": "low moisture part skim",
+      "brand": "Trestelle",
+      "moisture_percent": 50,
+      "grated": true,
+      "grams_per_pizza": 300
+    },
+    "application_order": "sauce under cheese",
+    "cheese_to_edge_cm": 2.54
+  },
+  "bake": {
+    "oven": "home electric",
+    "surface": "baking steel",
+    "preheat_minutes": 50,
+    "temp_c": 500,
+    "position": "bottom rack",
+    "time_minutes": 10.5,
+    "broil_finish": false,
+    "launch_method": "wooden peel with flour"
+  }
+}
